@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A frequency-selective noise gate VST3 plugin optimized for voice streaming.
+A frequency-selective noise gate VST2/VST3 plugin optimized for voice streaming.
 
 [日本語版 README はこちら](README_JP.md)
 
