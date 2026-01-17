@@ -1,18 +1,19 @@
-<# 
+<#
 .SYNOPSIS
-    Build script for FrequencyGate VST3 plugin
+    Build script for FrequencyGate VST2/VST3 plugin
 
 .DESCRIPTION
     Downloads dependencies (DPF, PFFFT) and builds the plugin.
-    
+    Builds both VST2 and VST3 formats.
+
 .PARAMETER Clean
     Remove build artifacts and dependencies before building
-    
+
 .PARAMETER Release
     Build in Release mode (default is RelWithDebInfo)
-    
+
 .PARAMETER Install
-    Copy the built VST3 to the system VST3 folder
+    Copy the built plugins to the system VST folders
 
 .EXAMPLE
     .\build.ps1
@@ -170,43 +171,84 @@ try {
     Pop-Location
 }
 
-# Find the built VST3
+# Find the built plugins
+$vst2File = Get-ChildItem -Path "build" -Recurse -Filter "FrequencyGate.dll" -File |
+            Where-Object { $_.DirectoryName -match "vst2" } |
+            Select-Object -First 1
 $vst3File = Get-ChildItem -Path "build" -Recurse -Filter "*.vst3" -Directory | Select-Object -First 1
 
+Write-Host ""
+if ($vst2File) {
+    Write-Host "Built VST2: $($vst2File.FullName)" -ForegroundColor Cyan
+}
 if ($vst3File) {
-    Write-Host ""
     Write-Host "Built VST3: $($vst3File.FullName)" -ForegroundColor Cyan
-    
-    # Install if requested
-    if ($Install) {
-        $destDir = "$env:COMMONPROGRAMFILES\VST3"
-        
-        if (-not (Test-Path $destDir)) {
-            Write-Host "Creating VST3 directory: $destDir" -ForegroundColor Yellow
-            New-Item -ItemType Directory -Force -Path $destDir | Out-Null
+}
+
+# Install if requested
+if ($Install) {
+    # Install VST2
+    if ($vst2File) {
+        $vst2DestDir = "$env:COMMONPROGRAMFILES\Steinberg\VST"
+
+        if (-not (Test-Path $vst2DestDir)) {
+            Write-Host "Creating VST2 directory: $vst2DestDir" -ForegroundColor Yellow
+            New-Item -ItemType Directory -Force -Path $vst2DestDir | Out-Null
         }
-        
-        $destPath = Join-Path $destDir $vst3File.Name
-        
-        Write-Host "Installing to: $destPath" -ForegroundColor Yellow
-        
+
+        $vst2DestPath = Join-Path $vst2DestDir $vst2File.Name
+
+        Write-Host "Installing VST2 to: $vst2DestPath" -ForegroundColor Yellow
+
         # Remove existing installation
-        if (Test-Path $destPath) {
-            Remove-Item -Recurse -Force $destPath
+        if (Test-Path $vst2DestPath) {
+            Remove-Item -Force $vst2DestPath
         }
-        
-        Copy-Item -Path $vst3File.FullName -Destination $destDir -Recurse -Force
-        
-        Write-Host "Installation complete!" -ForegroundColor Green
-        Write-Host ""
-        Write-Host "Plugin installed to: $destPath" -ForegroundColor Cyan
-    } else {
-        Write-Host ""
-        Write-Host "To install, run: .\build.ps1 -Install" -ForegroundColor Gray
-        Write-Host "Or manually copy to: $env:COMMONPROGRAMFILES\VST3" -ForegroundColor Gray
+
+        Copy-Item -Path $vst2File.FullName -Destination $vst2DestPath -Force
+
+        Write-Host "VST2 installation complete!" -ForegroundColor Green
+    }
+
+    # Install VST3
+    if ($vst3File) {
+        $vst3DestDir = "$env:COMMONPROGRAMFILES\VST3"
+
+        if (-not (Test-Path $vst3DestDir)) {
+            Write-Host "Creating VST3 directory: $vst3DestDir" -ForegroundColor Yellow
+            New-Item -ItemType Directory -Force -Path $vst3DestDir | Out-Null
+        }
+
+        $vst3DestPath = Join-Path $vst3DestDir $vst3File.Name
+
+        Write-Host "Installing VST3 to: $vst3DestPath" -ForegroundColor Yellow
+
+        # Remove existing installation
+        if (Test-Path $vst3DestPath) {
+            Remove-Item -Recurse -Force $vst3DestPath
+        }
+
+        Copy-Item -Path $vst3File.FullName -Destination $vst3DestDir -Recurse -Force
+
+        Write-Host "VST3 installation complete!" -ForegroundColor Green
+    }
+
+    Write-Host ""
+    if ($vst2File) {
+        Write-Host "VST2 installed to: $env:COMMONPROGRAMFILES\Steinberg\VST\$($vst2File.Name)" -ForegroundColor Cyan
+    }
+    if ($vst3File) {
+        Write-Host "VST3 installed to: $env:COMMONPROGRAMFILES\VST3\$($vst3File.Name)" -ForegroundColor Cyan
     }
 } else {
-    Write-Host "WARNING: Could not find built VST3 file" -ForegroundColor Yellow
+    Write-Host ""
+    Write-Host "To install, run: .\build.ps1 -Install" -ForegroundColor Gray
+    Write-Host "VST2 folder: $env:COMMONPROGRAMFILES\Steinberg\VST" -ForegroundColor Gray
+    Write-Host "VST3 folder: $env:COMMONPROGRAMFILES\VST3" -ForegroundColor Gray
+}
+
+if (-not $vst2File -and -not $vst3File) {
+    Write-Host "WARNING: Could not find built plugin files" -ForegroundColor Yellow
 }
 
 Write-Host ""

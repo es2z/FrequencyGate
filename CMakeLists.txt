@@ -62,7 +62,7 @@ add_subdirectory("${DPF_DIR}" dpf_build)
 # ============================================================================
 
 dpf_add_plugin(FrequencyGate
-    TARGETS vst3
+    TARGETS vst2 vst3
     FILES_DSP
         "${CMAKE_CURRENT_SOURCE_DIR}/FrequencyGatePlugin.cpp"
     FILES_UI
@@ -100,11 +100,17 @@ target_include_directories(FrequencyGate-ui PUBLIC
 # Installation
 # ============================================================================
 
-# Install to common VST3 folder on Windows
+# Install to common VST folders on Windows
 if(WIN32)
     set(VST3_INSTALL_DIR "$ENV{COMMONPROGRAMFILES}/VST3" CACHE PATH "VST3 installation directory")
-    
-    # Custom target to copy VST3 after build
+    set(VST2_INSTALL_DIR "$ENV{COMMONPROGRAMFILES}/Steinberg/VST" CACHE PATH "VST2 installation directory")
+
+    # Custom target to show build info for VST2
+    add_custom_command(TARGET FrequencyGate-vst2 POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E echo "VST2 built: $<TARGET_FILE:FrequencyGate-vst2>"
+    )
+
+    # Custom target to show build info for VST3
     add_custom_command(TARGET FrequencyGate-vst3 POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E echo "VST3 built: $<TARGET_FILE:FrequencyGate-vst3>"
     )
