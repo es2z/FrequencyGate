@@ -27,8 +27,8 @@
 #define DISTRHO_PLUGIN_WANT_MIDI_OUTPUT 0
 
 // UI configuration
-#define DISTRHO_UI_DEFAULT_WIDTH       800
-#define DISTRHO_UI_DEFAULT_HEIGHT      500
+#define DISTRHO_UI_DEFAULT_WIDTH       950
+#define DISTRHO_UI_DEFAULT_HEIGHT      620
 #define DISTRHO_UI_USE_NANOVG          1
 
 // Default FFT settings (can be changed at runtime)

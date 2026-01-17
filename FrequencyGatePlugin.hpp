@@ -95,6 +95,7 @@ private:
     // Window function
     std::vector<float> mWindow;
     std::vector<float> mWindowSum;
+    float mWindowGain;  // Amplitude correction factor for window
     
     // Circular buffers (doubled for easy access)
     std::vector<float> mInputBufferL;
