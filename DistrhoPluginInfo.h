@@ -14,7 +14,7 @@
 #define DISTRHO_PLUGIN_NAME            "FrequencyGate"
 #define DISTRHO_PLUGIN_URI             "https://github.com/streamtools/frequencygate"
 #define DISTRHO_PLUGIN_CLAP_ID         "com.streamtools.frequencygate"
-#define DISTRHO_PLUGIN_UNIQUE_ID       d_cconst('F', 'q', 'G', 't')  // VST2 unique ID
+#define DISTRHO_PLUGIN_UNIQUE_ID       FqGt  // VST2 unique ID (4-char code)
 
 // Plugin features
 #define DISTRHO_PLUGIN_HAS_UI          1
