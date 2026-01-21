@@ -26,7 +26,7 @@ class FrequencyGateUI : public UI
 {
 public:
     FrequencyGateUI()
-        : UI(950, 620)
+        : UI(660, 700)
         , mFontId(-1), mFontLoaded(false)
         , mDragging(-1), mDragY(0), mDragVal(0)
     {
@@ -105,7 +105,7 @@ protected:
         y += 35;
         
         kx = 60;
-        drawKnob(kx, y + 45, "Pre-Open", "ms", kParamPreOpen, 0, 20, false); kx += 120;
+        drawKnob(kx, y + 45, "Pre-Open", "ms", kParamPreOpen, 0, 50, false); kx += 120;
         drawKnob(kx, y + 45, "Attack", "ms", kParamAttack, 0.1f, 100, true); kx += 120;
         drawKnob(kx, y + 45, "Hold", "ms", kParamHold, 0, 500, false); kx += 120;
         drawKnob(kx, y + 45, "Release", "ms", kParamRelease, 1, 1000, true);
@@ -255,7 +255,7 @@ protected:
         switch (mDragging) {
             case kParamFreqLow: case kParamFreqHigh: mn = 20; mx = 20000; lg = true; break;
             case kParamThreshold: case kParamRange: mn = -96; mx = 0; break;
-            case kParamPreOpen: mn = 0; mx = 20; break;
+            case kParamPreOpen: mn = 0; mx = 50; break;
             case kParamAttack: mn = 0.1f; mx = 100; lg = true; break;
             case kParamHold: mn = 0; mx = 500; break;
             case kParamRelease: mn = 1; mx = 1000; lg = true; break;
@@ -303,7 +303,7 @@ protected:
                 switch (i) {
                     case kParamFreqLow: case kParamFreqHigh: mn = 20; mx = 20000; lg = true; break;
                     case kParamThreshold: case kParamRange: mn = -96; mx = 0; break;
-                    case kParamPreOpen: mn = 0; mx = 20; break;
+                    case kParamPreOpen: mn = 0; mx = 50; break;
                     case kParamAttack: mn = 0.1f; mx = 100; lg = true; break;
                     case kParamHold: mn = 0; mx = 500; break;
                     case kParamRelease: mn = 1; mx = 1000; lg = true; break;
